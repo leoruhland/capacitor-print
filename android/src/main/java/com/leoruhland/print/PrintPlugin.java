@@ -1,5 +1,12 @@
 package com.leoruhland.print;
 
+import android.content.Context;
+import android.print.PrintAttributes;
+import android.print.PrintDocumentAdapter;
+import android.print.PrintJob;
+import android.print.PrintManager;
+import android.webkit.WebView;
+import com.getcapacitor.CapacitorWebView;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
@@ -12,11 +19,26 @@ public class PrintPlugin extends Plugin {
     private Print implementation = new Print();
 
     @PluginMethod
-    public void echo(PluginCall call) {
-        String value = call.getString("value");
+    public void print(PluginCall call) {
+        getActivity()
+            .runOnUiThread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        // Get a PrintManager instance
+                        PrintManager printManager = (PrintManager) getActivity().getSystemService(Context.PRINT_SERVICE);
 
-        JSObject ret = new JSObject();
-        ret.put("value", implementation.echo(value));
-        call.resolve(ret);
+                        String jobName = "Printed Document";
+
+                        WebView webView = getBridge().getWebView();
+                        // Get a print adapter instance
+                        PrintDocumentAdapter printAdapter = webView.createPrintDocumentAdapter(jobName);
+
+                        // Create a print job with name and adapter instance
+                        PrintJob printJob = printManager.print(jobName, printAdapter, new PrintAttributes.Builder().build());
+                        call.resolve();
+                    }
+                }
+            );
     }
 }

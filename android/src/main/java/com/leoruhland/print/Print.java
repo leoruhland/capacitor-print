@@ -2,7 +2,7 @@ package com.leoruhland.print;
 
 public class Print {
 
-    public String echo(String value) {
+    public String print(String value) {
         return value;
     }
 }

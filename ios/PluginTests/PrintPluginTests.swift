@@ -12,13 +12,13 @@ class PrintTests: XCTestCase {
         super.tearDown()
     }
 
-    func testEcho() {
+    func testPrint() {
         // This is an example of a functional test case for a plugin.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
 
         let implementation = Print()
         let value = "Hello, World!"
-        let result = implementation.echo(value)
+        let result = implementation.print(value)
 
         XCTAssertEqual(value, result)
     }
